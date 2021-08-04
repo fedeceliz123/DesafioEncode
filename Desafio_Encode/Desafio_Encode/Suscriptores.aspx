@@ -29,7 +29,7 @@
             <div class="col">
                 <h6>Tipo Documento</h6>
                 
-                <select class="form-select" aria-label="Default select example" id="seleccion" runat="server" disabled="true">
+                <select class="form-select" aria-label="Default select example" id="seleccion" runat="server" >
                    
                      <option value="1">DNI</option>
                     <option value="2">CUIT</option>
@@ -78,7 +78,7 @@
                     </div>
                     <div class="col">
                         
-                       <asp:Button  CssClass="btn btn-info text-light mt-4" Text="Nuevo" runat="server" ID="btnNuevo" OnClick="btnNuevo_Click" />
+                       <asp:Button  CssClass="btn btn-info text-light mt-4" Text="Nuevo" runat="server" ID="btnNuevo" OnClick="btnNuevo_Click"  Enabled="False"/>
 
                     </div>
                 </div>

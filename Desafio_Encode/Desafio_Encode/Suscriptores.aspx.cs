@@ -22,14 +22,14 @@ namespace Desafio_Encode
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
 
-            /*
-            try
-            { */
+
+            try { 
+            
             
                 SQL.ConexionBD con = new SQL.ConexionBD();
 
                 var dt = new DataTable();
-                string consulta = "select *,CONVERT(char(200),DECRYPTBYPASSPHRASE('llave',Password)) as [Pass] from Suscriptor where NumeroDocumento=" + tbNDoc.Text;
+                string consulta = "select *,CONVERT(char(200),DECRYPTBYPASSPHRASE('llave',Password)) as [Pass] from Suscriptor where NumeroDocumento=" + tbNDoc.Text+ " and TipoDocumento="+seleccion.Value;
 
                 SqlDataAdapter da = new SqlDataAdapter(consulta, con.Conetar());
                 DataSet ds = new DataSet();
@@ -46,12 +46,12 @@ namespace Desafio_Encode
                 tbUsuario.Text = dt.Rows[0]["NombreUsuario"].ToString();
                 tbContrasena.Text = dt.Rows[0]["Pass"].ToString();
 
-                seleccion.Value = dt.Rows[0]["TipoDocumento"].ToString();
+               
 
                 btnModificar.Enabled = true;
+                HabilitarInput();
 
-               
-                /*
+
             }
             catch 
             {
@@ -61,7 +61,10 @@ namespace Desafio_Encode
                 ScriptManager.RegisterStartupScript(this, this.GetType(),
                    "Advertencia",
                    "alert('" + msg + "');", true);
-            }*/
+
+                btnNuevo.Enabled = true;
+                HabilitarInput();
+            }
 
 
 
@@ -70,13 +73,65 @@ namespace Desafio_Encode
        
         protected void btnModificar_Click(object sender, EventArgs e)
         {
-           
-            HabilitarInput();
-            btnNuevo.Enabled = false;
 
-            
+            if (tbNombre.Text!="" || tbApellido.Text!=""||tbNDoc.Text!=""||tbUsuario.Text!=""||tbContrasena.Text!="")
+            {
+                try
+                {
+                    SQL.ConexionBD con = new SQL.ConexionBD();
 
-            
+                    string cargar = "update Suscriptor set Nombre=@nombre, Apellido=@apellido, NumeroDocumento=@dni, TipoDocumento=@tipo, Direccion=@dir, Telefono=@telefono, Email=@mail, NombreUsuario=@user, Password=(ENCRYPTBYPASSPHRASE('llave',@pass)) where NumeroDocumento='" + tbNDoc.Text + "'";
+                    SqlCommand cmd = new SqlCommand(cargar, con.Conetar());
+
+                    cmd.Parameters.AddWithValue("@nombre", tbNombre.Text);
+                    cmd.Parameters.AddWithValue("@apellido", tbApellido.Text);
+                    cmd.Parameters.AddWithValue("@dni", long.Parse(tbNDoc.Text));
+                    cmd.Parameters.AddWithValue("@tipo", int.Parse(seleccion.Value));
+                    cmd.Parameters.AddWithValue("@dir", tbDireccion.Text);
+                    cmd.Parameters.AddWithValue("@telefono", tbTelefono.Text);
+                    cmd.Parameters.AddWithValue("@mail", tbMail.Text);
+                    cmd.Parameters.AddWithValue("@user", tbUsuario.Text);
+                    cmd.Parameters.AddWithValue("@pass", tbContrasena.Text);
+
+                    cmd.ExecuteNonQuery();
+
+
+
+                    string msg = "Modificacion con exito";
+                    ScriptManager.RegisterStartupScript(this, this.GetType(),
+                       "Advertencia",
+                       "alert('" + msg + "');", true);
+                    Limpiar();
+                    inhabilitarInput();
+                    btnModificar.Enabled = false;
+                    btnNuevo.Enabled = false;
+
+                }
+                catch
+                {
+                    string msg = "Error en la modificacion ''verifique que todos los campos esten completos y correctos''";
+                    ScriptManager.RegisterStartupScript(this, this.GetType(),
+                       "Advertencia",
+                       "alert('" + msg + "');", true);
+                    Limpiar();
+                    inhabilitarInput();
+                    btnModificar.Enabled = false;
+                    btnNuevo.Enabled = true;
+                }
+
+            }
+            else
+            {
+                string msg = "Error en la modificacion ''verifique que todos los campos esten completos y correctos''";
+                ScriptManager.RegisterStartupScript(this, this.GetType(),
+                   "Advertencia",
+                   "alert('" + msg + "');", true);
+                Limpiar();
+                inhabilitarInput();
+                btnModificar.Enabled = false;
+                btnNuevo.Enabled = true;
+            }
+
 
         }
 
@@ -121,66 +176,13 @@ namespace Desafio_Encode
 
         protected void btnNuevo_Click(object sender, EventArgs e)
         {
-           
-            HabilitarInput();
-            Limpiar();
-            
 
-
-        }
-
-        protected void btnAceptar_Click(object sender, EventArgs e)
-        {
-
-            if(btnNuevo.Enabled==false)
+            if (tbNombre.Text!="" && tbApellido.Text != "" && tbNDoc.Text != "" && tbUsuario.Text != "" && tbContrasena.Text!= "")
             {
-               try
+
+
+                try
                 {
-                    SQL.ConexionBD con = new SQL.ConexionBD();
-
-                    string cargar = "update Suscriptor set Nombre=@nombre, Apellido=@apellido, NumeroDocumento=@dni, TipoDocumento=@tipo, Direccion=@dir, Telefono=@telefono, Email=@mail, NombreUsuario=@user, Password=(ENCRYPTBYPASSPHRASE('llave',@pass)) where NumeroDocumento='" + tbNDoc.Text+"'";
-                    SqlCommand cmd = new SqlCommand(cargar, con.Conetar());
-
-                    cmd.Parameters.AddWithValue("@nombre",tbNombre.Text);
-                    cmd.Parameters.AddWithValue("@apellido", tbApellido.Text);
-                    cmd.Parameters.AddWithValue("@dni", long.Parse(tbNDoc.Text));
-                    cmd.Parameters.AddWithValue("@tipo", int.Parse(seleccion.Value));
-                    cmd.Parameters.AddWithValue("@dir", tbDireccion.Text);
-                    cmd.Parameters.AddWithValue("@telefono", tbTelefono.Text);
-                    cmd.Parameters.AddWithValue("@mail", tbMail.Text);
-                    cmd.Parameters.AddWithValue("@user", tbUsuario.Text);
-                    cmd.Parameters.AddWithValue("@pass", tbContrasena.Text);
-
-                    cmd.ExecuteNonQuery();
-
-                   
-
-                    string msg = "Modificacion con exito";
-                    ScriptManager.RegisterStartupScript(this, this.GetType(),
-                       "Advertencia",
-                       "alert('" + msg + "');", true);
-                    Limpiar();
-                    inhabilitarInput();
-                    btnModificar.Enabled = false;
-                    btnNuevo.Enabled = true;
-
-                }
-                catch
-                {
-                    string msg = "Error en la modificacion ''verifique que todos los campos esten completos y correctos''";
-                    ScriptManager.RegisterStartupScript(this, this.GetType(),
-                       "Advertencia",
-                       "alert('" + msg + "');", true);
-                    Limpiar();
-                    inhabilitarInput();
-                    btnModificar.Enabled = false;
-                    btnNuevo.Enabled = true;
-                }
-            }
-            else if(btnNuevo.Enabled == true)
-            {
-               /* try
-                {*/
                     SQL.ConexionBD con = new SQL.ConexionBD();
 
                     string cargar = "insert into Suscriptor (Nombre,Apellido,NumeroDocumento,TipoDocumento,Direccion,Telefono,Email,NombreUsuario,Password)values(@nombre,@apellido,@dni,@tipo,@dir,@telefono,@mail,@user,ENCRYPTBYPASSPHRASE('llave',@pass)) ";
@@ -207,8 +209,8 @@ namespace Desafio_Encode
                     Limpiar();
                     inhabilitarInput();
                     btnModificar.Enabled = false;
-                    btnNuevo.Enabled = true;
-/*
+                    btnNuevo.Enabled = false;
+
                 }
                 catch
                 {
@@ -219,10 +221,35 @@ namespace Desafio_Encode
                     Limpiar();
                     inhabilitarInput();
                     btnModificar.Enabled = false;
-                    btnNuevo.Enabled = true;
-                }*/
+                    btnNuevo.Enabled = false;
+                }
             }
+            else if(tbNombre.Text == "" || tbApellido.Text == "" || tbNDoc.Text == "" || tbUsuario.Text == "" || tbContrasena.Text == "")
+            {
+                string msg2= "Error en la carga ''verifique que todos los campos esten completos y correctos''";
+                ScriptManager.RegisterStartupScript(this, this.GetType(),
+                   "Advertencia",
+                   "alert('" + msg2 + "');", true);
+                Limpiar();
+                inhabilitarInput();
+                btnModificar.Enabled = false;
+                btnNuevo.Enabled = false;
+            }
+        }
 
+
+
+        
+
+        protected void btnAceptar_Click(object sender, EventArgs e)
+        {
+
+
+
+            Limpiar();
+            inhabilitarInput();
+            btnModificar.Enabled = false;
+            btnNuevo.Enabled = false;
         }
 
         protected void btnCancelar_Click(object sender, EventArgs e)
@@ -230,13 +257,12 @@ namespace Desafio_Encode
             Limpiar();
             inhabilitarInput();
             btnModificar.Enabled = false;
-            btnNuevo.Enabled = true;
+            btnNuevo.Enabled = false;
         }
     }
 
-
-
-
-
-
 }
+
+
+
+
