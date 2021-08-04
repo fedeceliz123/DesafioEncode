@@ -11,7 +11,7 @@ namespace Desafio_Encode.SQL
     {
 
         private SqlConnection Conexion = new SqlConnection();
-        private string cadena = "Data Source=FEDE\\SQLEXPRESS;Initial Catalog=DesafioEncode; Integrated Security=True";
+        private string cadena = "Data Source=10.100.100.102\\SQLSERVER2008;Initial Catalog=DesafioEncode; User ID=pasantes; Password=sqladmin;";
 
 
         public SqlConnection Conetar()

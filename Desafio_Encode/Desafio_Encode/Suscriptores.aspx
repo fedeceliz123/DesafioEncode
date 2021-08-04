@@ -8,6 +8,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" >
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" >
+     
+
+
     <title></title>
 </head>
 <body>
@@ -19,9 +23,11 @@
 
 
             <div class="container-fluid">
-    
+    <div class="container">
     <h2>Subcripciòn</h2>
     <h3>Para realizar subcripciòn complete los siguientes datos</h3>
+
+    </div>
     <hr />
     <div class="container">
     <h3>Buscar subcriptor</h3>
@@ -98,7 +104,18 @@
                     </div>
                     <div class="col">
                         <h6>Contraseña</h6>
-                       <asp:TextBox  CssClass="form-control" ID="tbContrasena" runat="server" type="text"  Enabled="false" ></asp:TextBox>
+
+
+                        <div class="input-group">
+                         <asp:TextBox  CssClass="form-control " ID="tbContrasena" runat="server" type="password"  Enabled="false" ></asp:TextBox>
+
+  
+                        <div class="input-group-append">
+                         <button class="btn btn-outline-secondary " type="button"  runat="server" id="ver" disabled="true"   ><i class="fas fa-eye"></i> </button>
+                        </div>
+                        </div>
+
+
 
                     </div>
                     <div class="col">
@@ -118,11 +135,11 @@
         <div class="row">
             <div class="col-1">
                
-                 <asp:Button  CssClass="btn btn-success" Text="Aceptar" runat="server" ID="btnAceptar" OnClick="btnAceptar_Click" />
+                 <asp:Button  CssClass="btn btn-success" Text="Aceptar" runat="server" ID="btnAceptar" OnClick="btnAceptar_Click" Enabled="false" />
             </div>
             <div class="col-1">
                 
-                <asp:Button  CssClass="btn btn-ligth border-dark" Text="Cancelar" runat="server" ID="btnCancelar" OnClick="btnCancelar_Click" />
+                <asp:Button  CssClass="btn btn-ligth border-dark" Text="Cancelar" runat="server" ID="btnCancelar" OnClick="btnCancelar_Click" Enabled="false" />
             </div>
         </div>
 
@@ -135,8 +152,9 @@
 
     </div>
 
-     
+       
         
     </form>
+    <script src="script/script1.js"></script>
 </body>
 </html>
